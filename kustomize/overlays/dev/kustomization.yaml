@@ -5,6 +5,3 @@ resources:
 images:
 - name: ghcr.io/kimnjang/mnist_classifier_bento
   newTag: 0.2.0
-- name: mnist_classifier_bento
-  newName: ghcr.io/kimnjang/mnist_classifier_bento
-  newTag: 0.1.0
