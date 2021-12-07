@@ -1,0 +1,72 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Packing BentoML
+
+on: 
+  workflow_dispatch:
+    inputs:
+      model_path:
+        description: 'model path (gs://xxxx.h5)'     
+        required: true
+      model_tag:
+        description: 'model tag'     
+        required: true
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: instll dependency
+        run: pip install tensorflow imageio bentoml pillow
+  
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v0.4.1'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+      - name: Packing BentoML
+        run: |
+          echo ${{ github.event.inputs.model_path }}
+          python bento/bento_packer.py --model_path ${{ github.event.inputs.model_path }}
+          echo "BENTO_SAVED_PATH=$(bentoml get MnistService:latest --print-location --quiet)" >> $GITHUB_ENV
+          echo ${{ env.BENTO_SAVED_PATH }}
+          
+      - name: Docker Build & Push
+        run: |
+          docker login ghcr.io --username ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
+          docker build -t ghcr.io/kimnjang/mnist_classifier_bento:${{ github.event.inputs.model_tag }} ${{env.BENTO_SAVED_PATH}}
+          docker push ghcr.io/kimnjang/mnist_classifier_bento:${{ github.event.inputs.model_tag }}
+  
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Setup Kustomize
+      uses: imranismail/setup-kustomize@v1
+
+    - name: Update Kubernetes resources
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: |
+       cd kustomize/overlays/dev
+       kustomize edit set image ghcr.io/kimnjang/mnist_classifier_bento:${{ github.event.inputs.model_tag }}
+       cat kustomization.yaml
+        
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Bump docker tag"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
