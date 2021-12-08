@@ -5,3 +5,11 @@ resources:
 images:
 - name: ghcr.io/kimnjang/mnist_classifier_bento
   newTag: 0.3.0
+
+patches:
+- path: training-job-patch.json
+  target:
+    group: batch
+    version: v1
+    kind: Job
+    name: mnist-train-job
