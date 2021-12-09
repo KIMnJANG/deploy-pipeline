@@ -7,8 +7,8 @@ spec:
   template:
     spec:
       containers:
-      - name: mnist-classifier
-        image: ghcr.io/kimjunil/mnist_classifier:0.0.1
+      - name: mnist-classifier-trainig
+        image: ghcr.io/kimnjang/mnist_classifier_training:427ea31f
         args: ["--epochs", "1"]
 
       restartPolicy: Never
