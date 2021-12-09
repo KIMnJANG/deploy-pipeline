@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mnist-train-job
+spec:
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      containers:
+      - name: mnist-classifier
+        image: ghcr.io/kimjunil/mnist_classifier:0.0.1
+        args: ["--epochs", "1"]
+
+      restartPolicy: Never
