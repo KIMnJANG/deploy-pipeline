@@ -1,1 +1,1 @@
-[ { "op": "replace", "path": "/spec/template/spec/containers/0/args", "value": [ "--optimizer", "sgd", "--units", 256 ] } ]
+[ { "op": "replace", "path": "/spec/template/spec/containers/0/args", "value": [ "--optimizer", "adam", "--units", 32 ] } ]
