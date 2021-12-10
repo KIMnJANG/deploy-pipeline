@@ -6,7 +6,7 @@ images:
 - name: ghcr.io/kimnjang/mnist_classifier_bento
   newTag: "0e470495"
 - name: ghcr.io/kimnjang/mnist_classifier_training
-  newTag: "0e470495"
+  newTag: 7e1fc0cf
 
 patches:
 - path: training-job-patch.json
