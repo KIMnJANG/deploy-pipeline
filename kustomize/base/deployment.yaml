@@ -35,4 +35,4 @@ spec:
           gitRepo:
             repository: https://github.com/KIMnJANG/deploy-pipeline
             revision: main
-            directory: repo
+            directory: .
