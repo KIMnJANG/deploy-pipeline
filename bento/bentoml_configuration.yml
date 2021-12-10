@@ -1,4 +1,4 @@
 bento_server:
   cors:
     enabled: true
-    access_control_allow_origin: *
+    access_control_allow_origin: '*'
