@@ -6,6 +6,7 @@ from PIL import Image
 from bentoml import api, artifacts, env, BentoService
 from bentoml.frameworks.keras import KerasModelArtifact
 from bentoml.adapters import ImageInput
+from bentoml.types import InferenceResult
 from prometheus_client import Summary
 
 MNIST_CLASSES = [str(x) for x in range(10)]
@@ -27,4 +28,11 @@ class MnistService(BentoService):
         inputs = np.stack(inputs)
         output = self.artifacts.model.predict(inputs)
         
-        return np.round(output, 10)
+        return InferenceResult(
+                        data=output,
+                        http_status=200,
+                        http_headers={"Content-Type": "application/json"},
+                )
+
+
+        # return np.round(output, 10)
