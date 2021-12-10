@@ -20,3 +20,19 @@ spec:
           name: mnist-classifier
           ports:
             - containerPort: 5000
+          volumeMounts:
+            - name: repo
+              mountPath: /repo
+              # /repo/bento/bentoml_configuration.yml
+              readOnly: true
+
+          env:
+            - name: BENTOML_CONFIG
+              value: /repo/bento/bentoml_configuration.yml
+
+      volumes:
+        - name: repo
+          gitRepo:
+            repository: https://github.com/KIMnJANG/deploy-pipeline
+            revision: main
+            directory: repo
