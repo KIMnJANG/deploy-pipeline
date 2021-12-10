@@ -38,6 +38,8 @@ jobs:
         run: |
           docker login ghcr.io --username ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
           docker build -t ghcr.io/kimnjang/mnist_classifier_bento:${{ github.event.inputs.model_tag }} ${{env.BENTO_SAVED_PATH}}
+          cat bento/bentoml_configuration.yml
+          docker cp bento/bentoml_config.yaml ghcr.io/kimnjang/mnist_classifier_bento:/home/bentoml/configuration.yml
           docker push ghcr.io/kimnjang/mnist_classifier_bento:${{ github.event.inputs.model_tag }}
   
   deploy:
