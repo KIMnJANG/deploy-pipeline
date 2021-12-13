@@ -1,0 +1,45 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      units:
+        description: 'units'     
+        required: true
+      optimizer:
+        description: 'optimizer'     
+        required: true
+      version:
+        description: 'version'     
+        required: true
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - uses: actions/checkout@v2
+        
+    - name: Docker Build & Push Action
+      uses: mr-smithers-excellent/docker-build-push@v5.6
+      with:
+        image: mnist_classifier_training
+        tags: ${{ github.event.inputs.optimizer }}
+        registry: ghcr.io
+        dockerfile: Dockerfile
+        directory: .
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.SECRET_TOKEN }}
+        buildArgs: GCS_BUCKET_ARG=${{ secrets.GCS_BUCKET }}, MODEL_TAG_ARG=${{ github.event.inputs.optimizer }}, GITHUB_OWNER_ARG=KIMnJANG, GITHUB_REPO_ARG=deploy-pipeline, GITHUB_WORKFLOW_ARG=bentoml.yml, GITHUB_TOKEN_ARG=${{ secrets.SECRET_TOKEN}}
+        addLatest: true
+    
+    - name: Set best hyper parameter
+      run: |
+        cd kustomize/overlays/dev
+        kustomize edit set image ghcr.io/kimnjang/mnist_classifier_training:${{ github.event.inputs.optimizer }}
+        echo $(jq '.[].value = ["--deploy", "True", "--optimizer", "${{ github.event.inputs.optimizer }}", "--units", "${{ github.event.inputs.units }}"]' training-job-patch.json) > training-job-patch.json
+        git config --global user.name ${{ github.repository_owner }}
+        git config --global user.email "iam@junil.kim"
+        git commit -am 'Publish new version ${GITHUB_SHA} to dev'
+        git push || echo 'no changes'
