@@ -8,7 +8,7 @@ images:
 - name: ghcr.io/kimnjang/mnist_classifier_training
   newTag: "23"
 - name: ghcr.io/kimnjang/train-mnist
-  newTag: 0.4.4
+  newTag: 0.4.5
 
 patches:
 - path: training-job-patch.json
