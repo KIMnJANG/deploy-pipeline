@@ -20,7 +20,14 @@ jobs:
     steps:
     
     - uses: actions/checkout@v2
-        
+    
+    - name: Checkout mnist-model repository
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.SECRET_TOKEN}}
+        repository: KIMnJANG/mnist-model
+        path: mnist-model
+
     - name: Docker Build & Push Action
       uses: mr-smithers-excellent/docker-build-push@v5.6
       with:
@@ -28,7 +35,7 @@ jobs:
         tags: ${{ github.event.inputs.optimizer }}
         registry: ghcr.io
         dockerfile: Dockerfile
-        directory: .
+        directory: mnist-model
         username: ${{ github.repository_owner }}
         password: ${{ secrets.SECRET_TOKEN }}
         buildArgs: GCS_BUCKET_ARG=${{ secrets.GCS_BUCKET }}, MODEL_TAG_ARG=${{ github.event.inputs.optimizer }}, GITHUB_OWNER_ARG=KIMnJANG, GITHUB_REPO_ARG=deploy-pipeline, GITHUB_WORKFLOW_ARG=bentoml.yml, GITHUB_TOKEN_ARG=${{ secrets.SECRET_TOKEN}}
