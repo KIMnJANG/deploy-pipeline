@@ -4,7 +4,7 @@ resources:
 - ../../base
 images:
 - name: ghcr.io/kimnjang/mnist_classifier_bento
-  newTag: 0.4.5
+  newTag: 0.4.6
 - name: ghcr.io/kimnjang/mnist_classifier_training
   newTag: "23"
 - name: ghcr.io/kimnjang/train-mnist
