@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: mnist-train-job
 spec:
-  ttlSecondsAfterFinished: 0
+  ttlSecondsAfterFinished: 180
   template:
     spec:
       nodeSelector:
