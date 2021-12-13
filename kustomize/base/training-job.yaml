@@ -1,14 +1,21 @@
 apiVersion: batch/v1
-kind: Job
-metadata:
-  name: mnist-train-job
-spec:
-  ttlSecondsAfterFinished: 600
-  template:
-    spec:
-      containers:
-      - name: mnist-classifier-trainig
-        image: ghcr.io/kimnjang/train-mnist:427ea31f
-        args: ["--epochs", "1"]
+  kind: Job
+  spec:
+    template:
+      spec:
+        nodeSelector:
+          cloud.google.com/gke-nodepool: gpu-pool
+        tolerations:
+          - key: "nvidia.com/gpu"
+            operator: "Exists"
+            effect: "NoSchedule"
+        containers:
+          - name: training-container
+            image: ghcr.io/kimnjang/train-mnist:0.0.1
+            command:
+              - "python"
+              - "/src/train.py"
+              - "--units=${trialParameters.hidden_units}"
+              - "--optimizer=${trialParameters.optimizer}"
 
-      restartPolicy: Never
+            restartPolicy: Never
