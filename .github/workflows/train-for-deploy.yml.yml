@@ -35,6 +35,7 @@ jobs:
         tags: ${{ github.event.inputs.optimizer }}
         registry: ghcr.io
         dockerfile: mnist-model/Dockerfile
+        directory: mnist-model
         username: ${{ github.repository_owner }}
         password: ${{ secrets.SECRET_TOKEN }}
         buildArgs: GCS_BUCKET_ARG=${{ secrets.GCS_BUCKET }}, MODEL_TAG_ARG=${{ github.event.inputs.optimizer }}, GITHUB_OWNER_ARG=KIMnJANG, GITHUB_REPO_ARG=deploy-pipeline, GITHUB_WORKFLOW_ARG=bentoml.yml, GITHUB_TOKEN_ARG=${{ secrets.SECRET_TOKEN}}
