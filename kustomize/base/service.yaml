@@ -6,6 +6,7 @@ metadata:
     app: mnist-classifier
 spec:
   type: LoadBalancer
+  loadBalancerIP: 35.192.123.101
   selector:  
     app: mnist-classifier
   ports:
