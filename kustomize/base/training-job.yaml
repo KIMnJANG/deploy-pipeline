@@ -20,4 +20,4 @@ spec:
             - "--units=${trialParameters.hidden_units}"
             - "--optimizer=${trialParameters.optimizer}"
 
-          restartPolicy: Never
+      restartPolicy: Never
