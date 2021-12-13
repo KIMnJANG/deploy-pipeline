@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: mnist-classifier-trainig
-        image: ghcr.io/kimnjang/mnist_classifier_training:427ea31f
+        image: ghcr.io/kimnjang/train-mnist:427ea31f
         args: ["--epochs", "1"]
 
       restartPolicy: Never
