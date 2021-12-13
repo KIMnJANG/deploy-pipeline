@@ -24,7 +24,7 @@ jobs:
     - name: Update Version & Set best hyper parameter
       run: |
         cd kustomize/overlays/dev
-        kustomize edit set image ghcr.io/kimnjang/mnist_classifier_training:${{ github.event.inputs.version }}
+        kustomize edit set image ghcr.io/kimnjang/train-mnist:${{ github.event.inputs.version }}
         echo $(jq '.[].value = ["--deploy", "True", "--optimizer", "${{ github.event.inputs.optimizer }}", "--units", "${{ github.event.inputs.units }}"]' training-job-patch.json) > training-job-patch.json
         git config --global user.name ${{ github.repository_owner }}
         git config --global user.email "iam@junil.kim"
