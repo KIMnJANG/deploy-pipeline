@@ -32,10 +32,10 @@
 - `bentoml_configuration.yml` <br/>
    BentoML 서버의 설정을 정의합니다.
 
-- `/kutomize/base/*`
+- `/kutomize/base/*` <br/>
    Kustomize를 사용하여 K8s 리소스들을 정의합니다.
 
-- `/kutomize/overlays/dev/*`
+- `/kutomize/overlays/dev/*` <br/>
    base에 정의된 리소스에서 실제로 dev 서버에 배포하기 위한 설정들을 overlay합니다.
    ArgoCD에서는 이 설정을 모니터링하며 지속적으로 배포합니다.
 
